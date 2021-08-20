@@ -7,11 +7,15 @@ from six.moves import cPickle
 # For this problem the validation and test data provided by the concerned authority did not have labels, so the training data was split into train, test and validation sets
 train_dir = '/raid/chenchao/code/BoneAge/BoneAge/data/train/'
 
+train_dir = r'E:\PycharmProjects\bone-age-prediction\rsna-bone-age\boneage-training-dataset\boneage-training-dataset'
+train_csv = r'E:\PycharmProjects\bone-age-prediction\rsna-bone-age\boneage-training-dataset.csv'
+
 X_train = []
 y_age = []
 y_gender = []
 
-df = pd.read_csv('/raid/chenchao/code/BoneAge/BoneAge/data/Training.csv')
+# df = pd.read_csv('/raid/chenchao/code/BoneAge/BoneAge/data/Training.csv')
+df = pd.read_csv(train_csv)
 a = df.as_matrix()
 m = a.shape[0]
 
@@ -19,15 +23,16 @@ path = train_dir
 k = 0
 print ('Loading data set...')
 for i in os.listdir(path):
-    y_age.append(df.BoneAge[df.ID == int(i[:-4])].tolist()[0])
-    a = df.Male[df.ID == int(i[:-4])].tolist()[0]
+    y_age.append(df.boneage[df.id == int(i[:-4])].tolist()[0])
+    a = df.male[df.id == int(i[:-4])].tolist()[0]
     if a:
         y_gender.append(1)
     else:
         y_gender.append(0)
-    img_path = path + i
+    img_path = os.path.sep.join([path, i])
     img = cv2.imread(img_path)
-    print (img_path)
+    print("i:{}".format(i))
+    print(img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img,(300,300))
     x = np.asarray(img, dtype=np.uint8)
