@@ -6,9 +6,10 @@ from six.moves import cPickle
 
 # For this problem the validation and test data provided by the concerned authority did not have labels, so the training data was split into train, test and validation sets
 train_dir = '/raid/chenchao/code/BoneAge/BoneAge/data/train/'
+data_root = r'D:\data\bone\rsna-bone-age'
 
-train_dir = r'E:\PycharmProjects\bone-age-prediction\rsna-bone-age\boneage-training-dataset\boneage-training-dataset'
-train_csv = r'E:\PycharmProjects\bone-age-prediction\rsna-bone-age\boneage-training-dataset.csv'
+train_dir = os.path.sep.join([data_root, 'boneage-training-dataset', 'boneage-training-dataset'])
+train_csv = os.path.sep.join([data_root, 'boneage-training-dataset.csv'])
 
 X_train = []
 y_age = []
@@ -21,6 +22,7 @@ m = a.shape[0]
 
 path = train_dir
 k = 0
+cnt = 0
 print ('Loading data set...')
 for i in os.listdir(path):
     y_age.append(df.boneage[df.id == int(i[:-4])].tolist()[0])
@@ -31,8 +33,11 @@ for i in os.listdir(path):
         y_gender.append(0)
     img_path = os.path.sep.join([path, i])
     img = cv2.imread(img_path)
-    print("i:{}".format(i))
-    print(img_path)
+    if cnt%1000 == 0:
+        print("cnt={}".format(cnt))
+        print("i:{}".format(i))
+        print(img_path)
+    cnt += 1
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img,(300,300))
     x = np.asarray(img, dtype=np.uint8)
